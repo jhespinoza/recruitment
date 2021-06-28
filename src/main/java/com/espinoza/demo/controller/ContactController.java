@@ -1,9 +1,9 @@
-package com.espinoza.controller;
+package com.espinoza.demo.controller;
 
-import com.espinoza.model.ListResponse;
-import com.espinoza.model.ObjectResponse;
-import com.espinoza.model.User;
-import com.espinoza.repository.UserRepository;
+import com.espinoza.demo.model.ListResponse;
+import com.espinoza.demo.model.ObjectResponse;
+import com.espinoza.demo.model.entity.Contact;
+import com.espinoza.demo.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
@@ -11,61 +11,54 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-
-
 @RestController
 @EnableAutoConfiguration
-@RequestMapping("/api/v1/users")
-public class UsersController {
-
+@RequestMapping("/api/v1/contact")
+public class ContactController {
     @Autowired
-    private UserRepository userRepository;
-
+    private ContactRepository contactRepository;
     /**
-     * Get all users
+     * Get all contact
      *
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public ListResponse getAllUsers(HttpServletResponse http) {
+    public ListResponse getAllContact(HttpServletResponse http) {
         ListResponse response = new ListResponse();
         response.setMessage("Successfully Retrieved");
         response.setStatusCode(http.getStatus());
-        List<User> users = (List<User>) userRepository.findAll();
-        response.setData(users);
+        List<Contact> contacts = (List<Contact>) contactRepository.findAll();
+        response.setData(contacts);
         return response;
     }
 
     /**
-     * Create new user
-     *
-     * @param user
-     * @return
+     * Create new contact
+
      */
     @RequestMapping(method = RequestMethod.POST)
-    public ListResponse saveUser(@RequestBody final User user, HttpServletResponse http) {
-        userRepository.save(user);
+    public ListResponse saveContact(@RequestBody final Contact contact, HttpServletResponse http) {
+        contactRepository.save(contact);
         ListResponse response = new ListResponse();
         response.setMessage("Successfully Created");
         response.setStatusCode(http.getStatus());
-        List<User> users = (List<User>) userRepository.findAll();
-        response.setData(users);
+        List<Contact> contacts = (List<Contact>) contactRepository.findAll();
+        response.setData(contacts);
         return response;
     }
 
     /**
-     * Get a specific user
+     * Get a specific contact
      *
-     * @param userId
-     * @return
+
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ObjectResponse getUser(@PathVariable("id") Integer userId, HttpServletResponse http) {
+    public ObjectResponse getContact(@PathVariable("id") Integer contactId, HttpServletResponse http) {
         ObjectResponse response = new ObjectResponse();
-        if (userRepository.exists(userId)) {
+        if (contactRepository.existsById(contactId)) {
             response.setMessage("Successfully Retrieved");
             response.setStatusCode(http.getStatus());
-            response.setData(userRepository.findOne(userId));
+            response.setData(contactRepository.findById(contactId));
         } else {
             response.setMessage("Record not found");
             response.setStatusCode(404);
@@ -75,19 +68,22 @@ public class UsersController {
     }
 
     /**
-     * Find and update a user
+     * Find and update a contact
      *
-     * @param user
+     * @param contact
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT)
-    public ObjectResponse updateUser(@RequestBody final User user, HttpServletResponse http) {
+    public ObjectResponse updateUser(@RequestBody final Contact contact, HttpServletResponse http) {
         ObjectResponse response = new ObjectResponse();
-        if (userRepository.exists(user.getId())) {
-            userRepository.updateUser(user.getUserName(), user.getPassword(), user.getActive(), user.getId());
+        if (contactRepository.existsById(contact.getId())) {
+            contactRepository.updateContact(contact.isActive(),contact.getAddress(),contact.getCity(),contact.getContract(),contact.getCountry(),
+                    contact.getEmail(),contact.getLast_name(),contact.getMobile(),contact.getPhoto(),contact.getState(),contact.getSalary(),
+                    contact.getId());
+
             response.setMessage("Successfully Updated");
             response.setStatusCode(http.getStatus());
-            response.setData(userRepository.findOne(user.getId()));
+            response.setData(contactRepository.findById(contact.getId()));
         } else {
             response.setMessage("Record not found");
             response.setStatusCode(404);
@@ -97,24 +93,24 @@ public class UsersController {
     }
 
     /**
-     * Delete a user
+     * Delete a contact
      *
-     * @param userId
+     * @param contactId
      * @return
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ListResponse deleteUser(@PathVariable("id") Integer userId, HttpServletResponse http) {
+    public ListResponse deleteUser(@PathVariable("id") Integer contactId, HttpServletResponse http) {
         ListResponse response = new ListResponse();
-        if(userRepository.exists(userId)) {
-            userRepository.delete(userId);
+        if(contactRepository.existsById(contactId)) {
+            contactRepository.deleteById(contactId);
             response.setStatusCode(http.getStatus());
             response.setMessage("Successfully Deleted");
         } else {
             response.setStatusCode(404);
             response.setMessage("Record not found");
         }
-        List<User> users = (List<User>) userRepository.findAll();
-        response.setData(users);
+        List<Contact> contacts = (List<Contact>) contactRepository.findAll();
+        response.setData(contacts);
         return response;
     }
 }

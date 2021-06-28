@@ -1,8 +1,6 @@
-package com.espinoza.model;
+package com.espinoza.demo.model.entity;
 
 import javax.persistence.*;
-
-
 
 @Entity
 @Table(name = "users")
@@ -56,4 +54,4 @@ public class User {
         this.active = active;
     }
 
-    }
+}

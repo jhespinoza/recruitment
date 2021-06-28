@@ -1,14 +1,11 @@
-package com.espinoza.model;
-
-import org.hibernate.validator.constraints.Email;
+package com.espinoza.demo.model.entity;
 
 import javax.persistence.*;
-
+import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(name = "contacts")
 public class Contact {
-
     @Id
     @GeneratedValue
     @Column(name = "id")

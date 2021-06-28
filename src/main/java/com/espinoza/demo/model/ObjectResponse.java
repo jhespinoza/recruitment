@@ -1,12 +1,8 @@
-package com.espinoza.model;
+package com.espinoza.demo.model;
 
-import java.util.List;
-
-
-public class ListResponse {
-
+public class ObjectResponse {
     private int statusCode;
-    private List data;
+    private Object data;
     private String message;
 
     public int getStatusCode() {
@@ -17,11 +13,11 @@ public class ListResponse {
         this.statusCode = statusCode;
     }
 
-    public List getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(List data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
